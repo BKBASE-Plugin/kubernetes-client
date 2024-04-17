@@ -61,12 +61,8 @@ public class TokenRefreshInterceptor implements Interceptor {
 
   private boolean refreshToken(BasicBuilder headerBuilder) {
     boolean resubmit = false;
-    String currentContextName = null;
-    if (config.getCurrentContext() != null) {
-      currentContextName = config.getCurrentContext().getName();
-    }
     String newAccessToken;
-    Config newestConfig = Config.autoConfigure(currentContextName);
+    Config newestConfig = config.refresh();
     if (newestConfig.getAuthProvider() != null && newestConfig.getAuthProvider().getName().equalsIgnoreCase("oidc")) {
       newAccessToken = OpenIDConnectionUtils.resolveOIDCTokenFromAuthConfig(newestConfig.getAuthProvider().getConfig(),
         factory.newBuilder());
